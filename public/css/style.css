@@ -1,0 +1,55 @@
+
+
+
+/* .modal{
+  position: fised;
+  top: 0;
+  left: 0;
+  width: 90%;
+  height: 90%;
+  background: rgba(0,0,0,0.7);
+  display: none;
+}
+.modal:target{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal2{
+  background: white;
+  padding: 20px;
+  width: 300px;
+  border-radius: 10px;
+  text-align: center;
+}
+.close{
+  text-decoration: none;
+  font-size: 25px;
+  float: right;
+}
+
+/* Modale sans JavaScript */
+
+
+
+/* body { 
+    font-family: Arial, sans-serif; 
+    background: #f5f5f5; 
+    margin:0; 
+    padding:0; 
+    height: 100vh; 
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+  } */
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style_modifie_employe.css">
+    <title>Document</title>
+</head>
+<body>
+    <!-- <div class="container-details">
+
+<header class="header-details">
+gestion des employés
+</header>
+
+<div class="content-details">
+
+PARTIE GAUCHE
+<div class="profil-details">
+
+  <div class="card-top-details">
+
+  <div class="photo-details">
+<p>wabo geovani</p>
+<span>stagiaire développeur</span>
+</div>
+
+<div class="details-info">
+<a href="#">Détails</a>
+
+<p>information personnel</p>
+
+<p>makepe BM,Douala,came</p>
+
+<p>Nationalité:Camerounais</p>
+
+<p>Etudie à IUT de Douala</p>
+
+</div>
+
+</div>
+
+<div class="info-details">
+<p>date d'embauche<br>02/02/2025</p>
+
+<p>wabogeovani5@gmail.com</p>
+
+<p>699576873</p>
+</div>
+
+<div class="description-details">
+<h3>description</h3>
+
+<p>
+stagiare développeur chez Expertiz consulting
+passionné par java script et react, je contribu a
+l'optimisation d'interface utilisateur tout en
+approfondissant mes compétences
+</p>
+
+</div>
+
+</div> -->
+
+
+<!-- PARTIE DROITE -->
+<div class="formulaire-details">
+
+<h2>Modifier l'employé</h2>
+
+
+<form id="edit-employe-form">
+
+  <label>
+    Photo URL / identifiant:
+    <input id="photo" name="photo" type="text" placeholder="URL de la photo" required>
+  </label>
+  
+  <label>
+    Nom:
+    <input id="nom" name="nom" type="text" placeholder="Nom" required>
+  </label>
+ 
+  <label>
+    Prénom:
+    <input id="prenom" name="prenom" type="text" placeholder="Prénom" required>
+  </label>
+ 
+  <label>
+    Adresse:
+    <input id="adresse" name="adresse" type="text" placeholder="Adresse" required>
+  </label>
+  
+  <label>
+    Poste:
+    <input id="poste" name="poste" type="text" placeholder="Poste" required>
+  </label>
+  
+  <label>
+    Département:
+    <input id="choisir_un_departement" name="choisir_un_departement" type="text" placeholder="Département" required>
+  </label>
+ 
+  <label>
+    Téléphone:
+    <input id="telephone" name="telephone" type="text" placeholder="Téléphone" required>
+  </label>
+ 
+  <label>
+    Email:
+    <input id="email" name="email" type="email" placeholder="Email" required>
+  </label>
+  
+  <label>
+    Date d'embauche:
+    <input id="date_naissance" name="date_naissance" type="date" required>
+  </label>
+
+  <div class="btn-details">
+   
+    <button class="save-details" type="submit">Enregistrer</button>
+    
+    <button class="cancel-details" type="button" onclick="window.location.href='/employe/gestion des employé.html'">Annuler</button>
+  </div>
+</form>
+
+
+<div id="message"></div>
+</div>
+
+<script>
+
+  const params = new URLSearchParams(window.location.search);
+  const employeeId = params.get('id');
+  const messageEl = document.getElementById('message');
+  const form = document.getElementById('edit-employe-form');
+
+
+  if (!employeeId) {
+    messageEl.textContent = 'Aucun identifiant d’employé fourni.';
+  } else {
+    // Appel vers l'API pour récupérer les données de l'employé
+    fetch(`/api/employes/${employeeId}`)
+      .then((response) => {
+        if (!response.ok) throw new Error('Employé introuvable');
+        return response.json();
+      })
+      .then((employee) => {
+        // Remplissage automatique du formulaire avec les valeurs existantes
+        document.getElementById('photo').value = employee.PHOTO || '';
+        document.getElementById('nom').value = employee.NOM || '';
+        document.getElementById('prenom').value = employee.PRENOM || '';
+        document.getElementById('adresse').value = employee.ADRESSE || '';
+        document.getElementById('poste').value = employee.POSTE || '';
+        document.getElementById('choisir_un_departement').value = employee.CHOISIR_un_DEPARTEMENT || '';
+        document.getElementById('telephone').value = employee.TELEPHONE || '';
+        document.getElementById('email').value = employee.E_MAIL || '';
+        if (employee.DATE_D_EMBAUCHE) {
+          const date = new Date(employee.DATE_D_EMBAUCHE);
+          document.getElementById('date_naissance').value = date.toISOString().slice(0, 10);
+        }
+      })
+      .catch((error) => {
+        messageEl.textContent = error.message;
+      });
+  }
+
+  // Envoi du formulaire vers l'API de mise à jour
+  form.addEventListener('submit', (event) => {
+    event.preventDefault();
+
+    const payload = {
+      photo: document.getElementById('photo').value,
+      nom: document.getElementById('nom').value,
+      prenom: document.getElementById('prenom').value,
+      adresse: document.getElementById('adresse').value,
+      poste: document.getElementById('poste').value,
+      telephone: document.getElementById('telephone').value,
+      choisir_un_departement: document.getElementById('choisir_un_departement').value,
+      email: document.getElementById('email').value,
+      date_naissance: document.getElementById('date_naissance').value,
+    };
+
+    // Appel PUT pour modifier l'employé avec les nouvelles valeurs
+    fetch(`/api/employes/${employeeId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+      .then((response) => {
+        if (!response.ok) throw new Error('Erreur lors de la mise à jour');
+        return response.json();
+      })
+      .then(() => {
+        // Retour à la page de gestion une fois la mise à jour effectuée
+        window.location.href = '/employe/gestion des employé.html';
+      })
+      .catch((error) => {
+        messageEl.textContent = error.message;
+      });
+  });
+</script>
+
+</div>
+</div>
+</body>
+</html>

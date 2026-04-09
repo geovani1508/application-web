@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" href="/css/style_departement.css">
+    <title>Département</title>
+</head>
+<body>
+
+    <!-- <div class="accueil">
+        <header class="header">
+            <div class="burger-menu">
+                <a href="/component/sidebar">
+                    <span class="burger-icon">☰</span>
+                </a>
+            </div>
+            <h1 class="title">
+                <span>Gestion des employés</span>
+            </h1>
+        </header>
+    </div> -->
+    
+    <!-- Sidebar -->
+    <!-- <nav class="sidebar">
+        <div class="sidebar-logo">
+            <img src="/image/image006.jpg" alt="Logo">
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="../index.html"><img src="/image/3388840.png" alt="Accueil"><span>Accueil</span></a></li>
+            <li><a href="../employe/gestion des employé.html"><img src="/image/631050.png" alt="Employé"><span>Employé</span></a></li>
+            <li><a href="departement.html"><img src="/image/1570970.png" alt="Département"><span>Département</span></a></li>
+            <li><a href="../poste/poste.html"><img src="/image/4994936.png" alt="Poste"><span>Poste</span></a></li>
+            <li><a href="../archive/archive.html"><img src="/image/1343124.png" alt="Archive"><span>Archive</span></a></li>
+        </ul>
+        <div class="sidebar-deconnexion">
+            <a href="../registre/connexion.html"><img src="/image/6811880.png" alt="déconnexion"><span>Déconnexion</span></a>
+        </div>
+    </nav> -->
+
+    
+<div class="depart">
+
+   
+<div class="couleur">
+    <h1>Département</h1>
+</div>
+     <div class="gauche2">
+        <button class="retour2">
+<a href="/Dashboard/dashboard.html"><img src="/image/3585896.png" alt="retour"></a>
+        </button>
+    </div>
+    <div class="droite2">
+        <button class="ajouter2">
+            <a href="ajouter département.html"><img src="/image/1828921.png" alt="ajouter"></a>
+        </button>
+    </div>
+  
+  <div class="Depar" id="departementList" style="display: flex; flex-direction: column; gap: 10px;"></div>
+
+</div> 
+
+   <script>
+function loadDepartements() {
+fetch('/api/departements')
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('departementList');
+      container.innerHTML = "";
+
+      data.forEach(dep => {
+        const item = document.createElement('div');
+        item.style = 'display: flex; justify-content: space-between; align-items: center; padding: 10px; border: 1px solid #ccc; border-radius: 5px;';
+        item.innerHTML = `
+          <span>${dep.NOM_DEPARTEMENT} (Code: ${dep.CODE || ''})</span>
+          <div>
+            <button onclick="deleteDept(${dep.ID_DEPARTEMENT})" style="margin-right:5px;">Supprimer</button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    });
+}
+
+
+function deleteDept(id) {
+  fetch(`/api/departements/${id}`, {
+    method: "DELETE"
+  })
+  .then(() => loadDepartements());
+}
+
+
+// charger au démarrage
+loadDepartements();
+</script> 
+</body>
+</html>

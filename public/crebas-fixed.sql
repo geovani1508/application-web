@@ -1,0 +1,81 @@
+/*
+Fixed schema for AUTO_INCREMENT PKs and sample data.
+Run this to recreate tables and fix creation errors.
+*/
+
+DROP DATABASE IF EXISTS gestion_employé;
+CREATE DATABASE gestion_employé;
+USE gestion_employé;
+
+-- Fixed tables with AUTO_INCREMENT PKs
+DROP TABLE IF EXISTS ARCHIVE;
+DROP TABLE IF EXISTS UTILISATEUR;
+DROP TABLE IF EXISTS POSTE;
+DROP TABLE IF EXISTS DEPARTEMENT;
+DROP TABLE IF EXISTS EMPLOYE;
+
+CREATE TABLE EMPLOYE (
+   ID_EMPLOYE           int AUTO_INCREMENT PRIMARY KEY,
+   PHOTO                LONGBLOB,
+   NOM                  TEXT,
+   PRENOM               TEXT,
+   ADRESSE              TEXT,
+   POSTE                TEXT,
+   TELEPHONE            TEXT,
+   CHOISIR_UN_DEPARTEMENT TEXT,
+   E_MAIL               TEXT,
+   DATE_D_EMBAUCHE      DATE
+);
+
+CREATE TABLE DEPARTEMENT (
+   ID_DEPARTEMENT       int AUTO_INCREMENT PRIMARY KEY,
+   ID_EMPLOYE           int NULL,  -- Optional FK
+   NOM_DEPARTEMENT      TEXT,
+   CODE                 TEXT,
+   FOREIGN KEY (ID_EMPLOYE) REFERENCES EMPLOYE(ID_EMPLOYE) ON DELETE SET NULL
+);
+
+
+CREATE TABLE poste (
+  ID_POSTE INT AUTO_INCREMENT PRIMARY KEY,
+  ID_EMPLOYE INT NULL,
+  NOM_POSTE TEXT,
+  CODE TEXT,
+  FOREIGN KEY (ID_EMPLOYE) REFERENCES employe(ID_EMPLOYE) ON DELETE SET NULL
+);
+
+
+
+CREATE TABLE ARCHIVE (
+   ID_ARCHIVE           int AUTO_INCREMENT PRIMARY KEY,
+   ID_EMPLOYE           int NOT NULL,
+   PHOTO                LONGBLOB,
+   NOM                  TEXT,
+   PRENOM               TEXT,
+   ADRESSE              TEXT,
+   POSTE                TEXT,
+   TELEPHONE            TEXT,
+   DEPARTEMENT          TEXT,
+   E_MAIL               TEXT,
+   DATE_D_EMBAUCHE      DATETIME,
+   STATUT               TEXT,
+   DATE_D_ARCHIVE       DATE
+);
+
+CREATE TABLE UTILISATEUR (
+   ID_UTILISATEUR       int AUTO_INCREMENT PRIMARY KEY,
+   ID_EMPLOYE           int NULL,
+   NOM                  TEXT,
+   PRENOM               TEXT,
+   E_MAIL               TEXT,
+   MOTS_DE_PASSE        TEXT,
+   ROLE                 TEXT,
+   DATE_CREATION        DATETIME,
+   FOREIGN KEY (ID_EMPLOYE) REFERENCES EMPLOYE(ID_EMPLOYE) ON DELETE SET NULL
+);
+
+-- Insert sample employee for testing FKs
+INSERT INTO EMPLOYE (NOM, PRENOM, E_MAIL) VALUES ('Test', 'Employé', 'test@example.com');
+INSERT INTO EMPLOYE (NOM, PRENOM, E_MAIL) VALUES ('Admin', 'User', 'admin@example.com');
+
+/* Ready! Test poste/departement creation now works without ID_EMPLOYE required. */

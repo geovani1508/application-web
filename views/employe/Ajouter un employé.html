@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ajouter un employé</title>
+<link rel="stylesheet" href="/css/style_ajouter_employe.css"> 
+</head>
+
+<body>
+
+    <!-- <div class="accueil">
+        <header class="header">
+            <div class="burger-menu">
+                <a href="/component/sidebar">
+                    <span class="burger-icon">☰</span>
+                </a>
+            </div>
+            <h1 class="title">
+                <span>Gestion des employés</span>
+            </h1>
+        </header>
+    </div> -->
+    
+    <!-- Sidebar -->
+    <!-- <nav class="sidebar">
+        <div class="sidebar-logo">
+            <img src="/image/image006.jpg" alt="Logo">
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="../index.html"><img src="/image/3388840.png" alt="Accueil"><span>Accueil</span></a></li>
+            <li><a href="gestion des employé.html"><img src="/image/631050.png" alt="Employé"><span>Employé</span></a></li>
+            <li><a href="../departement/departement.html"><img src="/image/1570970.png" alt="Département"><span>Département</span></a></li>
+            <li><a href="../poste/poste.html"><img src="/image/4994936.png" alt="Poste"><span>Poste</span></a></li>
+            <li><a href="../archive/archive.html"><img src="/image/1343124.png" alt="Archive"><span>Archive</span></a></li>
+        </ul>
+        <div class="sidebar-deconnexion">
+            <a href="../registre/connexion.html"><img src="/image/6811880.png" alt="déconnexion"><span>Déconnexion</span></a>
+        </div>
+    </nav> -->
+
+<div class="page-employe">
+
+ 
+
+<div class="debut">
+   
+    <h1>Ajouter un Employé</h1>
+</div> 
+<div class="gauche2">
+        <button class="retour2">
+<a href="/employe/gestion des employé.html"><img src="/image/3585896.png" alt="retour"></a>
+        </button>
+    </div>
+
+<h2 class="remplir">Remplissez les informations du nouvel employé</h2>
+
+    <div class="debut-formulaire">
+    
+<form enctype="multipart/form-data" class="formulaire1" action="/api/employes" method="POST">
+
+    <div class="photo-employe">
+        <input type="file" name="photo" accept="image/*">
+    </div> 
+    <div class="formulaire2">
+        <div class="form-group-employe">
+            <input type="text" name="nom" placeholder="Nom :" required>
+        </div>
+
+        <div class="form-group-employe">
+            <input type="text" name="prenom" placeholder="Prénom :" required>
+        </div>
+
+        <div class="form-group-employe">
+            <input type="text" name="adresse" placeholder="Adresse :" required>
+        </div>
+
+        <div class="form-group-employe">
+            <input type="text" name="poste" placeholder="Poste :" required>
+        </div>
+
+        <div class="form-group-employe">
+            <input type="tel" name="telephone" placeholder="Téléphone :" required>
+        </div>
+
+        <div class="form-group-employe">
+            <select name="choisir_un_département" class="select-employe" required>
+                <option value="">Choisir un département ▼</option>
+                <option value="IT">IT</option>
+                <option value="RH">RH</option>
+                <option value="Finance">Finance</option>
+                <option value="Marketing">Marketing</option>
+            </select>
+        </div>
+
+        <div class="form-group-employe">
+            <input type="email" name="email" placeholder="Email :" required>
+        </div>
+
+        <div class="form-group-employe">
+            <input type="date" name="date_d_embauche" placeholder="Date embauche :" required>
+        </div>
+
+
+        <div class="form-group-employe btn-group-employe">
+            <button type="submit" class="btn-employe">Enregistrer</button>
+        </div>
+    </div>
+    
+</form>
+</div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  const form = document.querySelector('form');
+  form.addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(form);
+    const submitBtn = form.querySelector('button[type="submit"]');
+    const originalText = submitBtn.textContent;
+    submitBtn.textContent = 'Enregistrement...';
+    submitBtn.disabled = true;
+    
+    try {
+      const response = await fetch('/api/employes', {
+        method: 'POST',
+        body: formData
+      });
+      
+      const data = await response.json();
+      
+      if (data.success) {
+        alert(' Employé ajouté avec succès!');
+        window.location.href = '/Dashboard/dashboard.html';
+      } else {
+        throw new Error(data.error || 'Erreur inconnue');
+      }
+    } catch (error) {
+      console.error('Erreur:', error);
+      alert(' Erreur: ' + (error.message || 'Impossible d\'ajouter l\'employé'));
+    } finally {
+      submitBtn.textContent = originalText;
+      submitBtn.disabled = false;
+    }
+  });
+});
+</script>
+
+</body>
+</html>
+

@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style_accueil.css">
+    <link rel="stylesheet" href="/css/style_gestion.css">
+    <link rel="stylesheet" href="/css/style_sidebar.css">
+    <title>Dashboard</title>
+</head>
+<body>
+    <input type="checkbox" id="menu-toggle">
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <span class="sidebar-close" onclick="closeNav()">&times;</span>
+            
+            <div class="sidebar-logo">
+                <img src="/image/image006.jpg" alt="Logo">
+            </div>
+        </div>
+        <ul class="sidebar-menu">
+            <li><a href="../Dashboard/dashboard.html" onclick="closeNav()"><img src="/image/3388840.png" alt="Accueil"><span>Accueil</span></a></li>
+            <li><a href="../employe/gestion des employé.html" onclick="closeNav()"><img src="/image/631050.png" alt="Employé"><span>Employé</span></a></li>
+            <li><a href="../departement/departement.html" onclick="closeNav()"><img src="/image/1570970.png" alt="Département"><span>Département</span></a></li>
+            <li><a href="../poste/poste.html" onclick="closeNav()"><img src="/image/4994936.png" alt="Poste"><span>Poste</span></a></li>
+            <li><a href="../archive/archive.html" onclick="closeNav()"><img src="/image/1343124.png" alt="Archive"><span>Archive</span></a></li>
+        </ul>
+        <div class="sidebar-deconnexion">
+            <a href="../registre/connexion.html" onclick="closeNav()"><img src="/image/6811880.png" alt="déconnexion"><span>Déconnexion</span></a>
+        </div>
+    </nav>
+    <div class="accueil1">
+        
+            
+             <span><header class="header"> 
+              
+            <span>
+             <h1 class="title1">
+                  
+            <div class="burger">
+             <label for="menu-toggle" class="burger-menu"onclick="toggleMenu()">☰</label>
+            </div></span><span>
+               gestion des employés</span>
+            </h1></span>
+        </header></span>
+    </div>
+    
+    <div class="banner">
+        <img src="/image/image006.jpg" alt="Logo" class="banner-img">
+        <p class="banner-text">Bienvenue sur l'application de gestion du personnel</p>
+    </div>
+    <div class="accueil">
+
+    <div class="stats-container">
+    <span>
+        <a href="/departement/departement.html" class="stat-card">
+            <div class="stat-title">Département</div>
+            <div class="stat-number">4</div>
+        </a>
+     </span>
+      <span>
+        <a href="/employe/gestion des employé.html" class="stat-card">
+            <div class="stat-title">Total Employés</div>
+            <div class="stat-number">08</div>
+        </a>
+      </span>
+    </div>
+
+    <div class="stats-container2">
+
+        <div class="stat-card3">
+
+            <a href="Total employés RH.html" class="stat-card">
+                <div class="stat-title">Total Employé RH</div>
+                <div class="stat-number">01</div>
+            </a>
+
+            <a href="Total Employés finances.html" class="stat-card">
+                <div class="stat-title">Total Employés finances</div>
+                <div class="stat-number">01</div>
+            </a>
+
+        </div>
+
+        <div class="stat-card4">
+
+            <a href="Total employé marketing.html" class="stat-card">
+                <div class="stat-title">Total Employé marketing</div>
+                <div class="stat-number">01</div>
+            </a>
+
+            <a href="Total employés IT.html" class="stat-card">
+                <div class="stat-title">Total Employés IT</div>
+                <div class="stat-number">04</div>
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+    <footer class="footer">
+        <p>&copy; 2024 Gestion des employés. Tous droits réservés.</p>
+    </footer>
+    <style>
+        .menu {
+    display: none;
+    position: absolute;
+    top: 100%; /* juste en bas du header */
+    left: 0;
+    width: 100%;
+    background: black;
+    z-index: 999;
+}
+
+.menu.active {
+    display: block;
+}
+        .sidebar-header {
+            position: relative;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .sidebar-close {
+            position: absolute;
+            right: 10px;
+            top: 10px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #999;
+            z-index: 1000;
+        }
+        .sidebar-close:hover {
+            color: #dc3545;
+        }
+    </style>
+    <script>
+        function toggleNav() {
+            const sidebar = document.querySelector('.sidebar');
+            const checkbox = document.getElementById('menu-toggle');
+            sidebar.classList.toggle('active');
+            checkbox.checked = !checkbox.checked;
+        }
+        function closeNav() {
+            const sidebar = document.querySelector('.sidebar');
+            const checkbox = document.getElementById('menu-toggle');
+            sidebar.classList.remove('active');
+            checkbox.checked = false;
+        }
+        function toggleMenu() {
+    document.querySelector('.menu').classList.toggle('active');
+}
+        document.querySelector('.menu-btn').addEventListener('click', toggleNav);
+        document.addEventListener('click', function(e) {
+            if (e.target === document.querySelector('.sidebar')) {
+                closeNav();
+            }
+        });
+    </script>
+    <script>
+document.addEventListener('DOMContentLoaded', async () => {
+  const DEPT = 'RH';  // RH.html → 'RH' | marketing → 'Marketing' | IT → 'IT' | finances → 'Finance'
+
+  const res = await fetch(`/api/employes/dept/${DEPT}`);
+  const {total, employees} = await res.json();
+
+  // Compteur total
+  const h1 = document.querySelector('h1');
+  h1.insertAdjacentHTML('afterend', `<div style="font-size:1.4em;font-weight:bold;margin:10px 0;">${total} employé(s)</div>`);
+
+  // Supprimer cartes statiques
+  document.querySelectorAll('.card').forEach(card => card.remove());
+
+  // Ajouter cartes dynamiques
+  const container = document.querySelector('.container');
+  employees.forEach(emp => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <a href="/employe/détails.html?id=${emp.ID_EMPLOYE}" class="card-link"></a>
+      <div class="left">
+        <p><strong>${emp.NOM || ''} ${emp.PRENOM || ''}</strong></p>
+        <p>${emp.POSTE || emp.CHOISIR_UN_DEPARTEMENT || ''}</p>
+        <p class="email">${emp.E_MAIL || ''}</p>
+        <p>${emp.TELEPHONE || ''}</p>
+      </div>
+      <div class="right">
+        <button class="btn-archive" onclick="if(confirm('Archiver?')) fetch('/api/employes/${emp.ID_EMPLOYE}',{method:'DELETE'}).then(()=>location.reload())">
+          <img src="/image/1343124.png" alt="Archiver">
+        </button>
+        <a href="/employe/modifie_employe.html?id=${emp.ID_EMPLOYE}" class="btn-modifier">
+          <img src="/image/10174003.png" alt="Modifier">
+        </a>
+        <span class="details" onclick="location.href='/employe/détails.html?id=${emp.ID_EMPLOYE}'">Details</span>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+  
+  if (employees.length === 0) container.innerHTML += '<p style="text-align:center;color:#999;">Aucun employé</p>';
+});
+</script>
+
+    <!-- Script dynamique pour dashboard avec auto-refresh -->
+    <script>
+async function refreshDashboardStats() {
+  try {
+    const response = await fetch('/api/employes/stats');
+    const stats = await response.json();
+    
+    // Met à jour Total Employés
+    const totalEmpEl = document.querySelector('a[href="/employe/gestion des employé.html"] .stat-number');
+    if (totalEmpEl) totalEmpEl.textContent = stats.totalEmployes;
+    
+    // Met à jour Départements
+    const totalDeptEl = document.querySelector('a[href="/departement/departement.html"] .stat-number');
+    if (totalDeptEl) totalDeptEl.textContent = stats.totalDepartements;
+    
+    // Met à jour par département (match titres des cartes)
+    const rhEl = Array.from(document.querySelectorAll('.stat-title')).find(el => 
+      el.textContent.includes('RH')
+    )?.parentElement?.querySelector('.stat-number');
+    if (rhEl) rhEl.textContent = stats.byDept['RH'] || 0;
+    
+    const financesEl = Array.from(document.querySelectorAll('.stat-title')).find(el => 
+      el.textContent.includes('finances')
+    )?.parentElement?.querySelector('.stat-number');
+    if (financesEl) financesEl.textContent = stats.byDept['Finances'] || 0;
+    
+    const marketingEl = Array.from(document.querySelectorAll('.stat-title')).find(el => 
+      el.textContent.includes('marketing')
+    )?.parentElement?.querySelector('.stat-number');
+    if (marketingEl) marketingEl.textContent = stats.byDept['Marketing'] || 0;
+    
+    const itEl = Array.from(document.querySelectorAll('.stat-title')).find(el => 
+      el.textContent.includes('IT')
+    )?.parentElement?.querySelector('.stat-number');
+    if (itEl) itEl.textContent = stats.byDept['IT'] || 0;
+    
+  } catch (error) {
+    console.error('Erreur chargement stats dashboard:', error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  refreshDashboardStats();  // Load initial
+  
+  // Auto-refresh every 30s
+  setInterval(refreshDashboardStats, 30000);
+  
+  // Listen for refresh-stats events (from other pages)
+  window.addEventListener('refresh-stats', refreshDashboardStats);
+});
+    </script>
+</body>
+</html>
+
+

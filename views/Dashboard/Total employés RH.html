@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style_gestion.css">
+    <title>Total employés RH</title>
+</head>
+<body>
+    
+    
+    
+
+  <div class="container">
+
+  <h1>Total employés RH</h1>
+
+  
+
+      <div class="gauche2">
+        <button class="retour2">
+<a href="/Dashboard/dashboard.html"><img src="/image/3585896.png" alt="retour"></a>
+        </button>
+    </div>
+    <div class="droite2">
+        <button class="ajouter2">
+            <a href="/employe/Ajouter un employé.html"><img src="/image/1828921.png" alt="ajouter"></a>
+        </button>
+    </div>
+
+  <!-- Carte employé -->
+
+
+  <div class="card">
+
+   <a href="/employe/détails.html" class="card-link"></a>
+
+  <div class="left">
+    <p><strong>Wabo geovani</strong></p>
+    <p>stagiaire</p>
+    <p class="email">E-mail ********</p>
+  </div> 
+   
+
+    <div class="right">
+       <span>
+
+<a href="/archive/Archiver.html" class="btn-archive">
+      <img src="/image/1343124.png" alt="Archiver">
+    </a>
+
+    <a href="/employe/modifie_employe.html" class="btn-modifier">
+      <img src="/image/10174003.png" alt="Modifier">
+    </a>
+
+    <span class="details">Details</span>
+    </span>
+
+  </div>
+
+    
+
+  </div>
+  
+
+  <div class="card">
+
+</div>
+
+    
+
+</div>
+
+
+  <script>
+document.addEventListener('DOMContentLoaded', async () => {
+  // CHANGEZ SEULEMENT CETTE LIGNE PAR PAGE
+  const DEPT = 'RH';  // RH → 'RH', marketing → 'Marketing', IT → 'IT', finances → 'Finance'
+
+  try {
+    const response = await fetch(`/api/employes/dept/${DEPT}`);
+    const data = await response.json();
+
+    // 1. Ajouter compteur total après h1 (optionnel)
+    const h1 = document.querySelector('h1');
+    const totalDiv = document.createElement('div');
+    totalDiv.className = 'total-count';
+    totalDiv.textContent = `Total: ${data.total} employé(s)`;
+    totalDiv.style.cssText = 'font-size: 1.5em; font-weight: bold; margin: 10px 0; color: #333;';
+    h1.insertAdjacentElement('afterend', totalDiv);
+
+    // 2. Remplacer contenu .container par cartes dynamiques (garde boutons existants)
+    const container = document.querySelector('.container');
+    const cardsContainer = container.querySelector('.cards-container') || container;
+    cardsContainer.innerHTML = `
+      ${data.employees.map(emp => {
+        const fullName = `${emp.NOM || ''} ${emp.PRENOM || ''}`.trim();
+        const role = emp.POSTE || emp.CHOISIR_UN_DEPARTEMENT || 'Poste non défini';
+        const email = emp.E_MAIL || 'Aucun email';
+        const tel = emp.TELEPHONE ? `Tél: ${emp.TELEPHONE}` : '';
+        return `
+          <div class="card">
+            <a href="/employe/détails.html?id=${emp.ID_EMPLOYE}" class="card-link"></a>
+            <div class="left">
+              <p><strong>${fullName}</strong></p>
+              <p>${role}</p>
+              <p class="email">${email}</p>
+              <p>${tel}</p>
+            </div>
+            <div class="right">
+              <button class="btn-archive" onclick="archiveEmployee(${emp.ID_EMPLOYE})">
+                <img src="/image/1343124.png" alt="Archiver">
+              </button>
+              <a href="/employe/modifie_employe.html?id=${emp.ID_EMPLOYE}" class="btn-modifier">
+                <img src="/image/10174003.png" alt="Modifier">
+              </a>
+              <span class="details" onclick="showDetails(${emp.ID_EMPLOYE})">Details</span>
+            </div>
+        `;
+      }).join('') || '<p style="text-align:center;color:#666;">Aucun employé dans ce département.</p>'}
+    `;
+  } catch (error) {
+    console.error('Erreur:', error);
+    document.querySelector('.container').innerHTML += '<p style="color:red;">Erreur chargement données.</p>';
+  }
+});
+
+// Fonctions utilitaires (copiées de script.js)
+function escapeHtml(text) {
+  return String(text).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+function archiveEmployee(id) {
+  if (!confirm("Archiver ?")) return;
+  fetch(`/api/employes/${id}`, {method: 'DELETE'}).then(() => location.reload());
+}
+function showDetails(id) {
+  window.location.href = `/employe/détails.html?id=${id}`;
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+<link rel="stylesheet" href="/css/style_connexion.css">
+<script src="script.js"></script>
+  <title>Connexion</title>
+</head>
+<body>
+  <div class="connexion">
+    <div class="form">
+      <div class="choisir">
+        <div class="select-box">
+  <div class="selected" onclick="toggleMenu()">
+    <img src="" id="selected-img">
+    <span id="selected-text">choisis 
+      la langue</span>
+  </div>
+
+  <div class="options" id="options">
+    <div class="option" onclick="selectLang('','/image/téléchargement (1).png')">
+      <img src="/image/téléchargement (1).png"> 
+    </div>
+    <div class="option" onclick="selectLang('','/image/téléchargement.png')">
+      <img src="/image/téléchargement.png"> 
+    </div>
+  </div>
+</div>
+      </div>
+      <form>
+        <img class="img2" src="/image/image006.jpg" />
+        <h2>Se connecter</h2>
+        <div class="mail">
+          <input type="mail" placeholder="mail:" required>
+        </div><br>
+        <div class="password">
+          <input type="password" placeholder="Mot de passe:" required>
+        </div><br>
+
+       <a href="../dashboard/dashboard.html" class="submit">Connexion</a> 
+        <!-- <div class="submit">
+          <button type="submit"><a href="../dashboard/dashboard.html"></a>Connexion</button>
+        </div> -->
+        <br><p>Vous n'avez pas de compte ? <a href="inscription.html">S'inscrire</a></p> 
+      </form>
+    </div>
+      <script>
+    function toggleMenu() {
+  const options = document.getElementById("options");
+  options.style.display = options.style.display === "block" ? "none" : "block";
+}
+
+function selectLang(text, img) {
+  document.getElementById("selected-text").innerText = text;
+  document.getElementById("selected-img").src = img;
+  document.getElementById("options").style.display = "none";
+  
+}
+</script>
+</body>
+</html>

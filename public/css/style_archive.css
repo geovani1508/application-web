@@ -1,0 +1,250 @@
+/*Archive*/
+body{
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.archi{
+  border-radius: 10px;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    width: 30%;
+    /* height: hv; */
+    background-color: white;
+    /* margin-top: 10 auto; */
+    float: right;
+    margin-bottom: 20%;
+    position: absolute;
+    left:28%;
+    
+    
+}
+
+.gauche2 {
+  display: flex;
+  align-items: center;
+  width: 90%;
+}
+
+.retour2 {
+  margin-right: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 22px;
+  font-size: 24px;
+  border: none;
+  border-radius: 0px;
+  background-color: white;
+  color: white;
+  cursor: pointer;
+}
+.retour2 img {
+  width: 18px;
+  height: 18px;
+} 
+
+.empl{
+  align-items: center;
+  padding: 20px;
+  /* width: 100%; */
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  height: 50px;
+  margin: 5px;
+  gap: 20px;
+  text-align: center;
+
+}
+.str{
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 30px;
+  text-align: center;
+
+}
+.submit1 {
+  display: flex;
+  width: 20%;
+  height: 20px;
+  align-items: center;
+  justify-content: center;
+  gap: 50px;
+  position: center;
+  background-color: white;
+  color:black ;
+  text-align: center;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 5px;
+
+
+  
+}
+/* .empl1{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+} */
+.empl1{
+  align-items: center;
+  padding: 20px;
+  width: 85%;
+  border-radius: 20px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+  height: 50px;
+  margin: 5px;
+  
+display: flex;
+justify-content: space-between;
+font-size: 14px;
+}
+
+.sidebar {
+  width: 22.5%;
+  height: 510px;
+  background-color: rgb(8, 192, 243);
+  color: #000;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  position: absolute;
+  align-items: center;
+  box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+  justify-content: flex-start;
+  padding: 10px;
+}
+
+.sidebar-logo img {
+  width: 150px;
+  height: 120px;
+  border-radius: 50px;
+  display: block;
+  margin: 0;
+  text-align: left;
+    
+}
+
+.sidebar-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  flex: 1;
+  color: #000;
+  width: 150px;
+}
+
+.sidebar-menu li {
+  margin-bottom: 5px;
+  color: #000;
+}
+
+.sidebar-menu a {
+  display: flex;
+  align-items: center;
+  color: #000;
+  text-decoration: none;
+  padding: 15px;
+  border-radius: 8px;
+  transition: background 0.3s;
+  font-size: 16px;
+  font-weight: 50;
+ 
+}
+
+.sidebar-menu a:hover {
+  background-color: #bdbbbb;
+}
+
+.sidebar-menu img {
+  width: 24px;
+  height: 24px;
+  margin-right: 10px;
+}
+
+.sidebar-menu span {
+  font-size: 14px;
+}
+
+.sidebar-deconnexion img {
+  width: 20px;
+  height: 20px;
+  border-radius: 20%;
+  display: block;
+  margin: 0;
+
+}
+
+/* Déconnexion  */
+.sidebar-deconnexion {
+  padding: 5px 0;
+  border-top: 1px solid #ddd;
+}
+
+.sidebar-deconnexion a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: start;
+  color: #dc3545;
+  text-decoration: none;
+  padding: 10px 15px;
+  border-radius: 8px;
+  font-size: 12px;
+  font-weight: 50;
+  transition: background 0.3s;
+}
+
+.sidebar-deconnexion a:hover {
+  background-color: #f0f0f0;
+}
+
+
+
+
+/* HEADER */
+
+.header{
+width:100%;
+max-width:1200px;
+background:black;
+color:white;
+padding:15px 20px;
+display: flex;
+align-items: center;
+margin-top: -25px;
+margin-right: 0;
+}
+
+.title{
+font-size:28px;
+gap: 10px;
+
+
+}
+
+
+.title img{
+  margin-right: 10px;
+}
+
+/* Burger Menu */
+.burger-menu a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 60%;
+  height: 40px;
+  background-color: white;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-right: 20px;
+}
+
+.burger-icon {
+  font-size: 28px;
+  color: black;
+  font-weight: bold;
+}

@@ -1,0 +1,271 @@
+
+
+.connexion{
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+
+  background-color:white;
+
+  width:100%;
+  max-width:300px;
+
+  height:530px;
+
+  padding:40px;
+  gap:35px;
+
+  margin:auto;
+  border-radius:15px;
+  margin-top: -40px;
+}
+
+
+
+
+.mail, .password, .submit {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 90%;
+  padding: 12px 10px;
+  background-color: #ffffff;
+  font-size: 18px;
+  border-radius: 50px;
+  box-shadow: 0px 4px 16px #00000082;
+  gap: 10px;
+}
+
+.mail {
+  box-shadow: 0px 4px 16px #c4c2c282;
+  border: 1px solid #00000082; 
+}
+
+.mail input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 16px;
+   background: transparent;
+}
+.password input {
+  width: 100%;
+  border: none;
+  outline: none;
+  font-size: 16px;
+   background: transparent;
+   background-color: white;
+}
+
+.submit a {
+  display: block;        /* prend toute la largeur */
+  width: 100%;
+  height: 100%;
+  text-align: center;
+  padding: 10px;
+  text-decoration: none;
+  background-color: #17ce30bd;
+  width: 90%;
+       /* optionnel */
+  color: white;
+}
+.submit {
+  display: block;
+  text-align: center;
+  padding: 10px;
+  background-color: #17ce30bd;
+  color: white;
+  text-decoration: none;
+}
+
+/* .submit {
+  width: 100%;
+} */
+
+.password {
+  box-shadow: 0px 4px 16px #00000082;
+  border: 1px solid #00000082; 
+  
+}
+
+/* .submit {
+  background-color: #17ce30bd;
+  width: 90%;
+} */
+
+.img2{
+  /* width: 50%; */
+  /* height: 150px; */
+  gap: 20px;
+  justify-content: center;
+}
+/* .div2{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+} */
+
+.choisir{
+  position: relative;
+  width: 10%;
+  height: 10px;
+  left: 50px;
+
+}
+
+/* Language selector - top right of form */
+.language-selector {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+}
+
+.language-selector select {
+  padding: 8px 12px;
+  /* border-radius: 5px; */
+  /* border: 1px solid #ccc; */
+  background-color: #ffffff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.language-selector select:hover {
+  border-color: #27cc66;
+}
+
+.lang-select {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  margin: 0;
+}
+
+.lang-select select {
+  padding: 8px;
+  border-radius: 5px;
+  border: 1px solid #ddd;
+  right: 8px;
+  margin: 0;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    width: 90%;
+    height: 600px;
+    align-items: center;
+    gap: 10px;
+    /* position: relative; */
+    border-radius: 25px;
+    box-shadow: 0px 8px 24px #54535382;
+    overflow: hidden;
+    justify-content: center;
+    margin: 10px;
+    padding: 10px 20px;
+    /* margin-top: -100px; */
+    max-width: 400px;
+}
+
+
+.select-box {
+  width: 150px;
+  position: relative;
+  font-family: Arial;
+  height: 80px;
+}
+
+.selected {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: white;
+  /* border: 1px solid #ccc; */
+  cursor: pointer;
+  justify-content: center;
+  font-size: 14px;
+  
+}
+
+.selected img {
+  width: 15%;
+}
+
+
+
+
+
+.options {
+  display: none;
+  position: absolute;
+  /* width: 100%; */
+  background: white;
+  border: 1px solid #ccc;
+}
+
+.option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.option img {
+  width: 25px;
+}
+
+.option:hover {
+  background: #f0f0f0;
+}
+
+.h2{
+  justify-content: center;
+}
+
+/* HEADER */
+
+.header{
+width:100%;
+max-width:1200px;
+background:black;
+color:white;
+padding:15px 20px;
+display: flex;
+align-items: center;
+}
+
+.title{
+font-size:28px;
+gap: 10px;
+
+
+}
+
+
+.title img{
+  margin-right: 10px;
+}
+
+/* Burger Menu */
+.burger-menu {
+  margin-right: 20px;
+}
+
+.burger-menu a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background-color: white;
+  border-radius: 8px;
+  text-decoration: none;
+}
+
+.burger-icon {
+  font-size: 28px;
+  color: black;
+  font-weight: bold;
+}
