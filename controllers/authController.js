@@ -1,72 +1,47 @@
-const db = require("../config/index"); // ou ../config/db
+const db = require("../config/index.js");
 const bcrypt = require("bcryptjs");
 
-// ================== CREER UTILISATEUR ==================
-exports.register = (req, res) => {
-
-  const { NOM, PRENOM, E_MAIL, MOTS_DE_PASSE, ROLE } = req.body;
-
-  if (!NOM || !PRENOM || !E_MAIL || !MOTS_DE_PASSE) {
-      return res.status(400).json({ message: "Tous les champs sont requis" });
-  }
-
-  const hashedPassword = bcrypt.hashSync(MOTS_DE_PASSE, 8);
-
-  const sql = `INSERT INTO UTILISATEUR (NOM, PRENOM, E_MAIL, MOTS_DE_PASSE, ROLE)
-               VALUES (?, ?, ?, ?, ?)`;
-
-  db.query(sql, [NOM, PRENOM, E_MAIL, hashedPassword, ROLE || "user"], (err, result) => {
-      if (err) {
-          if (err.code === "ER_DUP_ENTRY") {
-              return res.status(400).json({ message: "Email déjà utilisé" });
-          }
-          return res.status(500).json({ message: err.message });
-      }
-      res.status(201).json({ message: "Utilisateur créé avec succès", ID_EMPLOYE: result.insertId });
-  });
-};
-
-
-/*connexion */
 exports.login = (req, res) => {
+    try {
+        const { E_MAIL, MOTS_DE_PASSE } = req.body || {};
 
-  const { E_MAIL, MOTS_DE_PASSE } = req.body;
+        if (!E_MAIL || !MOTS_DE_PASSE) {
+            return res.status(400).json({ message: "Email et mot de passe requis" });
+        }
 
-  const sql = "SELECT * FROM UTILISATEUR WHERE E_MAIL = ?";
+        const sql = "SELECT * FROM utilisateur WHERE E_MAIL = ?";
 
-  db.query(sql, [E_MAIL], (err, result) => {
+        db.query(sql, [E_MAIL], (err, results) => {
+            if (err) {
+                console.log("DB ERROR:", err);
+                return res.status(500).json({ message: "Erreur serveur" });
+            }
 
-    if (err) {
-      console.log(err);
-      res.send("Erreur serveur");
-    }
+            if (results.length === 0) {
+                return res.status(404).json({ message: "Utilisateur non trouvé" });
+            }
 
-    if (result.length === 0) {
-      res.json({ message: "Utilisateur introuvable" });
-    } 
-    else {
+            const user = results[0];
 
-      const utilisateur = result[0];
+            const isMatch = bcrypt.compareSync(MOTS_DE_PASSE, user.MOTS_DE_PASSE);
 
-      const isMatch = bcrypt.compareSync(MOTS_DE_PASSE, utilisateur.MOTS_DE_PASSE);
+            if (!isMatch) {
+                return res.status(401).json({ message: "Mot de passe incorrect" });
+            }
 
-      if (!isMatch) {
-        res.json({ message: "Mot de passe incorrect" });
-      } else {
-        res.json({
-          message: "Connexion réussie",
-          user: {
-            ID_EMPLOYE: utilisateur.ID_EMPLOYE,
-            NOM: utilisateur.NOM,
-            PRENOM: utilisateur.PRENOM,
-            E_MAIL: utilisateur.E_MAIL,
-            ROLE: utilisateur.ROLE
-          }
+            return res.json({
+                message: "Connexion réussie",
+                user: {
+                    ID_EMPLOYE: user.ID_EMPLOYE,
+                    NOM: user.NOM,
+                    PRENOM: user.PRENOM,
+                    E_MAIL: user.E_MAIL,
+                    ROLE: user.ROLE
+                }
+            });
         });
-      }
 
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
     }
-
-  });
-
 };

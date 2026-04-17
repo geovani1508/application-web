@@ -373,8 +373,11 @@ exports.getDashboardStats = (req, res) => {
         
         // Defaults pour cartes existantes
         stats.byDept['RH'] = stats.byDept['RH'] || 0;
-        stats.byDept['Finances'] = stats.byDept['Finances'] || 0;
-        stats.byDept['Marketing'] = stats.byDept['Marketing'] || 0;
+        stats.byDept['Finance'] = stats.byDept['Finance'] || 0;
+
+        stats.byDept['Marketing'] = stats.byDept['Marketing'] || 0;  
+        stats.byDept['Finances'] = stats.byDept['Finance'] || 0;
+
         stats.byDept['IT'] = stats.byDept['IT'] || 0;
         
         res.json(stats);
@@ -415,7 +418,7 @@ exports.restoreEmploye = (req, res) => {
           arch.ADRESSE,
           arch.POSTE,
           arch.TELEPHONE,
-          arch.CHOISIR_UN_DEPARTEMENTT,
+          arch.CHOISIR_UN_DEPARTEMENT,
           arch.E_MAIL,
           arch.DATE_D_EMBAUCHE,
           arch.STATUT,
@@ -425,8 +428,9 @@ exports.restoreEmploye = (req, res) => {
 
           db.query(`DELETE FROM \`${tname}\` WHERE ${whereId} = ?`, [id], (err3) => {
             if (err3) return res.status(500).json(sqlErrorPayload(err3));
-            res.redirect('/employe/gestion des employé.html');
+            // res.redirect('/employe/gestion des employé.html');
             
+           res.json({ success: true, message: "Employé archivé" });  // Pas res.redirect()
 
             // res.json({ message: "Employé restauré" });
           });
@@ -573,11 +577,11 @@ exports.deleteEmploye = (req, res) => {
                 });
               });
             });
-          });
+         });
         });
         });
-      });
-    });
-  });
+     });
+   });
+ });
 };
 

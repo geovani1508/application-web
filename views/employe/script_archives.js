@@ -45,7 +45,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function escapeHtml(text) {
   return String(text)
     .replace(/&/g, '&amp;')
-    .replace(/</g, '<')
+    // .replace(/</g, '<') 
+    .replace(/</g, '&lt;')
     .replace(/>/g, '>')
     .replace(/"/g, '"')
     .replace(/'/g, '&#039;');

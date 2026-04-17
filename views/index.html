@@ -2,64 +2,73 @@
 <html>
 <head>
   <meta charset="utf-8">
-<link rel="stylesheet" href="/css/style_connexion.css">
-<script src="script.js"></script>
-  <title>Connexion</title>
+  <link rel="stylesheet" href="/css/style_connexion.css">
+  <script src="/uploads/script2.js"></script>
+  <title>Accueil</title>
 </head>
+
 <body>
 
+<div class="connexion">
+  <div class="form">
+    <div class="lang-switch" style="position: absolute; top: 20px; right: 20px; z-index: 10;">
+      <select id="langSelect" onchange="changeLanguage()">
+        <option value="fr">🇫🇷 Français</option>
+        <option value="en">🇺🇸 English</option>
+      </select>
+    </div>
+    <form id="loginForm">
+      <img class="img2" src="/image/image006.jpg" />
+      <h2 id="loginTitle">Se connecter</h2>
+
+      <div class="mail">
+        <input id="email" type="email" placeholder="Email" required>
+      </div><br>
+
+      <div class="password">
+        <input id="password" type="password" placeholder="Mot de passe" required>
+      </div><br>
+
+      <button type="submit" class="submit" id="loginBtn">Connexion</button>
+
+      <p id="signupText">
+        Vous n'avez pas de compte ?
+        <a href="/inscription">S'inscrire</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+const translations = {
+  fr: {
+    loginTitle: 'Se connecter',
+    emailPlaceholder: 'Email',
+    passwordPlaceholder: 'Mot de passe',
+    submitBtn: 'Connexion',
+    signupText: "Vous n'avez pas de compte ? <a href='/inscription'>S'inscrire</a>"
+  },
+  en: {
+    loginTitle: 'Sign in',
+    emailPlaceholder: 'Email',
+    passwordPlaceholder: 'Password',
+    submitBtn: 'Sign in',
+    signupText: "Don't have an account? <a href='/inscription'>Sign up</a>"
+  }
+};
+
+function changeLanguage() {
+  const lang = document.getElementById('langSelect').value;
+  const t = translations[lang];
   
-
-  <div class="connexion">
-    <div class="form">
-      <div class="choisir">
-        <div class="select-box">
-  <div class="selected" onclick="toggleMenu()">
-    <img  id="selected-img">
-    <span id="selected-text">Choisir la langue▼</span>
-  </div>
-
-  <div class="options" id="options">
-    <div class="option" onclick="selectLang('','/image/téléchargement (1).png')"▼>
-      <img src="/image/téléchargement (1).png"▼> 
-    </div>
-    <div class="option" onclick="selectLang('','/image/téléchargement.png')"▼>
-      <img src="/image/téléchargement.png"▼> 
-    </div>
-  </div>
-  </div>
-      </div>
-
-     
-      <form>
-        <img class="img2" src="/image/image006.jpg" />
-        <h2>Se connecter</h2>
-        <div class="mail">
-          <input type="mail" placeholder="mail:" required>
-        </div><br>
-        <div class="password">
-          <input type="password" placeholder="Mot de passe:" required>
-        </div><br>
-<a href="dashboard/dashboard.html" class="submit">Connexion</a>
-
-        <!-- <div class="submit">
-          <a type="submit" href="dashboard/dashboard.html">Connexion</a>
-        </div> -->
-        <br><p>Vous n'avez pas de compte ? <a href="registre/inscription.html">S'inscrire</a></p> 
-      </form>
-    </div>
-    <script>
-    function toggleMenu() {
-  const options = document.getElementById("options");
-  options.style.display = options.style.display === "block" ? "none" : "block";
-}
-
-function selectLang(text, img) {
-  document.getElementById("selected-text").innerText = text;
-  document.getElementById("selected-img").src = img;
-  document.getElementById("options").style.display = "none";
-  
+  document.getElementById('loginTitle').textContent = t.loginTitle;
+  document.getElementById('email').placeholder = t.emailPlaceholder;
+  document.getElementById('password').placeholder = t.passwordPlaceholder;
+  document.getElementById('loginBtn').textContent = t.submitBtn;
+  document.getElementById('signupText').innerHTML = t.signupText;
 }
 </script>
+ 
+
 </body>
 </html>

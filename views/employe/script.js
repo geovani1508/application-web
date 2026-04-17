@@ -1,7 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
-  const list = document.getElementById('employees-list');
-
+const list = document.getElementById('employees-list');
   if (!list) return;
+
+// Auto-refresh list every 30s
+setInterval(() => {
+  location.reload();
+}, 30000);
+
+// Listen dashboard events
+window.addEventListener('refresh-stats', () => location.reload());
+
 
   fetch('/api/employes')
     .then((response) => {
@@ -88,9 +96,14 @@ function archiveEmployee(id) {
       }
       return body;
     })
-    .then(() => {
-      window.location.href = '/archive/archive.html?archived=1';
+.then(() => {
+      // Trigger dashboard refresh
+      window.dispatchEvent(new CustomEvent('refresh-stats'));
+    
+      window.location.href = '/employe/archives.html?archived=1';  // Pas /archive/archive.html
+
     })
+
     .catch(error => {
       console.error(error);
       alert(error.message ? `Erreur archivage : ${error.message}` : 'Erreur archivage.');

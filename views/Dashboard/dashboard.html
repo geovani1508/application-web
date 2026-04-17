@@ -23,7 +23,7 @@
             <li><a href="../employe/gestion des employé.html" onclick="closeNav()"><img src="/image/631050.png" alt="Employé"><span>Employé</span></a></li>
             <li><a href="../departement/departement.html" onclick="closeNav()"><img src="/image/1570970.png" alt="Département"><span>Département</span></a></li>
             <li><a href="../poste/poste.html" onclick="closeNav()"><img src="/image/4994936.png" alt="Poste"><span>Poste</span></a></li>
-            <li><a href="../archive/archive.html" onclick="closeNav()"><img src="/image/1343124.png" alt="Archive"><span>Archive</span></a></li>
+            <li><a href="../employe/archives.html" onclick="closeNav()"><img src="/image/1343124.png" alt="Archive"><span>Archive</span></a></li>
         </ul>
         <div class="sidebar-deconnexion">
             <a href="../registre/connexion.html" onclick="closeNav()"><img src="/image/6811880.png" alt="déconnexion"><span>Déconnexion</span></a>
@@ -32,16 +32,20 @@
     <div class="accueil1">
         
             
-             <span><header class="header"> 
+      <span>
+                <header class="header"> 
               
-            <span>
-             <h1 class="title1">
+        <span>
+               <h1 class="title1">
                   
-            <div class="burger">
-             <label for="menu-toggle" class="burger-menu"onclick="toggleMenu()">☰</label>
-            </div></span><span>
+               <div class="burger">
+                 <label for="menu-toggle" class="burger-menu"onclick="toggleMenu()">☰</label>
+            </div>
+        </span>
+            <span>
                gestion des employés</span>
-            </h1></span>
+            </h1>
+        </span>
         </header></span>
     </div>
     
@@ -55,13 +59,13 @@
     <span>
         <a href="/departement/departement.html" class="stat-card">
             <div class="stat-title">Département</div>
-            <div class="stat-number">4</div>
+            <div class="stat-number" id="total-departements">4</div>
         </a>
      </span>
       <span>
         <a href="/employe/gestion des employé.html" class="stat-card">
             <div class="stat-title">Total Employés</div>
-            <div class="stat-number">08</div>
+            <div class="stat-number" id="total-employes">08</div>
         </a>
       </span>
     </div>
@@ -72,12 +76,12 @@
 
             <a href="Total employés RH.html" class="stat-card">
                 <div class="stat-title">Total Employé RH</div>
-                <div class="stat-number">01</div>
+                <div class="stat-number"id="rh">01</div>
             </a>
 
             <a href="Total Employés finances.html" class="stat-card">
                 <div class="stat-title">Total Employés finances</div>
-                <div class="stat-number">01</div>
+                <div class="stat-number"id="finance">01</div>
             </a>
 
         </div>
@@ -86,12 +90,12 @@
 
             <a href="Total employé marketing.html" class="stat-card">
                 <div class="stat-title">Total Employé marketing</div>
-                <div class="stat-number">01</div>
+                <div class="stat-number" id="marketing">01</div>
             </a>
 
             <a href="Total employés IT.html" class="stat-card">
                 <div class="stat-title">Total Employés IT</div>
-                <div class="stat-number">04</div>
+                <div class="stat-number" id="it">04</div>
             </a>
 
         </div>
@@ -166,8 +170,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   const {total, employees} = await res.json();
 
   // Compteur total
-  const h1 = document.querySelector('h1');
-  h1.insertAdjacentHTML('afterend', `<div style="font-size:1.4em;font-weight:bold;margin:10px 0;">${total} employé(s)</div>`);
+//   const h1 = document.querySelector('h1');
+//   h1.insertAdjacentHTML('afterend', `<div style="font-size:1.4em;font-weight:bold;margin:10px 0;">${total} employé(s)</div>`);
 
   // Supprimer cartes statiques
   document.querySelectorAll('.card').forEach(card => card.remove());
@@ -208,6 +212,7 @@ async function refreshDashboardStats() {
   try {
     const response = await fetch('/api/employes/stats');
     const stats = await response.json();
+    
     
     // Met à jour Total Employés
     const totalEmpEl = document.querySelector('a[href="/employe/gestion des employé.html"] .stat-number');

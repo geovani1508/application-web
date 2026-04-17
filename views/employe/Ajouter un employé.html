@@ -60,7 +60,10 @@
 <form enctype="multipart/form-data" class="formulaire1" action="/api/employes" method="POST">
 
     <div class="photo-employe">
-        <input type="file" name="photo" accept="image/*">
+        
+        
+        <input type="file" name="photo" accept="image/*" >
+       <img  src="/image/photo.jpg" alt="image">
     </div> 
     <div class="formulaire2">
         <div class="form-group-employe">
@@ -133,8 +136,12 @@ document.addEventListener('DOMContentLoaded', function() {
       const data = await response.json();
       
       if (data.success) {
+
         alert(' Employé ajouté avec succès!');
+        // Trigger global refresh
+        window.dispatchEvent(new CustomEvent('refresh-stats'));
         window.location.href = '/Dashboard/dashboard.html';
+
       } else {
         throw new Error(data.error || 'Erreur inconnue');
       }

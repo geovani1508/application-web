@@ -1,32 +1,56 @@
 const db = require("../config/index.js");
 const bcrypt = require("bcryptjs");
 
-// CREATE - Inscription
+// ================= REGISTER =================
 exports.register = (req, res) => {
     const { NOM, PRENOM, E_MAIL, MOTS_DE_PASSE, ROLE } = req.body;
 
+    // Vérification champs
     if (!NOM || !PRENOM || !E_MAIL || !MOTS_DE_PASSE) {
         return res.status(400).json({ message: "Tous les champs sont requis" });
     }
 
-    // Hasher le mot de passe
-    const hashedPassword = bcrypt.hashSync(MOTS_DE_PASSE, 8);
+    try {
+        const hashedPassword = bcrypt.hashSync(MOTS_DE_PASSE, 8);
 
-    const sql = `INSERT INTO UTILISATEUR (NOM, PRENOM, E_MAIL, MOTS_DE_PASSE, ROLE)
-                 VALUES (?, ?, ?, ?, ?)`;
+        const sql = `
+            INSERT INTO utilisateur (NOM, PRENOM, E_MAIL, MOTS_DE_PASSE, ROLE)
+            VALUES (?, ?, ?, ?, ?)
+        `;
 
-    db.query(sql, [NOM, PRENOM, E_MAIL, hashedPassword, ROLE || "user"], (err, result) => {
-        if (err) {
-            if (err.code === "ER_DUP_ENTRY") {
-                return res.status(400).json({ message: "Email déjà utilisé" });
+        db.query(
+            sql,
+            [
+                NOM,
+                PRENOM,
+                E_MAIL,
+                hashedPassword,
+                ROLE && ROLE.trim() !== "" ? ROLE : "user"
+            ],
+            (err, result) => {
+                if (err) {
+                    console.log("ERREUR SQL REGISTER:", err);
+
+                    if (err.code === "ER_DUP_ENTRY") {
+                        return res.status(400).json({ message: "Email déjà utilisé" });
+                    }
+
+                    return res.status(500).json({ message: err.message });
+                }
+
+                return res.status(201).json({
+                    message: "Utilisateur créé avec succès",
+                    ID_EMPLOYE: result.insertId
+                });
             }
-            return res.status(500).json({ message: err.message });
-        }
-        res.status(201).json({ message: "Utilisateur créé avec succès", ID_EMPLOYE: result.insertId });
-    });
+        );
+
+    } catch (error) {
+        return res.status(500).json({ message: error.message });
+    }
 };
 
-// CREATE (CRUD) - Créer utilisateur admin
+// ================= CREATE USER =================
 exports.createUser = (req, res) => {
     const { NOM, PRENOM, E_MAIL, MOTS_DE_PASSE, ROLE } = req.body;
 
@@ -36,29 +60,51 @@ exports.createUser = (req, res) => {
 
     const hashedPassword = bcrypt.hashSync(MOTS_DE_PASSE, 8);
 
-    const sql = `INSERT INTO UTILISATEUR (NOM, PRENOM, E_MAIL, MOTS_DE_PASSE, ROLE)
-                 VALUES (?, ?, ?, ?, ?)`;
+    const sql = `
+        INSERT INTO utilisateur (NOM, PRENOM, E_MAIL, MOTS_DE_PASSE, ROLE)
+        VALUES (?, ?, ?, ?, ?)
+    `;
 
-    db.query(sql, [NOM, PRENOM, E_MAIL, hashedPassword, ROLE || "user"], (err, result) => {
-        if (err) {
-            if (err.code === "ER_DUP_ENTRY") {
-                return res.status(400).json({ message: "Email déjà utilisé" });
+    db.query(
+        sql,
+        [
+            NOM,
+            PRENOM,
+            E_MAIL,
+            hashedPassword,
+            ROLE && ROLE.trim() !== "" ? ROLE : "user"
+        ],
+        (err, result) => {
+            if (err) {
+                console.log("ERREUR SQL CREATE:", err);
+
+                if (err.code === "ER_DUP_ENTRY") {
+                    return res.status(400).json({ message: "Email déjà utilisé" });
+                }
+
+                return res.status(500).json({ message: err.message });
             }
-            return res.status(500).json({ message: err.message });
+
+            return res.status(201).json({
+                message: NOM + " " + PRENOM,
+                ID_EMPLOYE: result.insertId
+            });
         }
-        res.status(201).json({ message: "Utilisateur créé", ID_EMPLOYE: result.insertId });
-    });
+    );
 };
 
-// READ - Lister tous les utilisateurs
+// ================= GET USERS =================
 exports.getUsers = (req, res) => {
-    db.query("SELECT ID_EMPLOYE, NOM, PRENOM, E_MAIL, ROLE FROM UTILISATEUR", (err, results) => {
-        if (err) return res.status(500).json({ message: err.message });
-        res.json(results);
-    });
+    db.query(
+        "SELECT ID_EMPLOYE, NOM, PRENOM, E_MAIL, ROLE, telephone FROM utilisateur",
+        (err, results) => {
+            if (err) return res.status(500).json({ message: err.message });
+            res.json(results);
+        }
+    );
 };
 
-// UPDATE - Modifier un utilisateur
+// ================= UPDATE =================
 exports.updateUser = (req, res) => {
     const { id } = req.params;
     const { NOM, PRENOM, E_MAIL, MOTS_DE_PASSE, ROLE } = req.body;
@@ -66,52 +112,66 @@ exports.updateUser = (req, res) => {
     if (!NOM || !PRENOM || !E_MAIL) {
         return res.status(400).json({ message: "Champs obligatoires manquants" });
     }
-    
-    // Vérifier existence
-    db.query("SELECT ID_EMPLOYE FROM UTILISATEUR WHERE ID_EMPLOYE=?", [id], (err, results) => {
-        if (err) return res.status(500).json({ message: err.message });
-        if (results.length === 0) {
-            return res.status(404).json({ message: "Utilisateur non trouvé" });
-        }
-        
-        let sql = "UPDATE UTILISATEUR SET NOM=?, PRENOM=?, E_MAIL=?, ROLE=?";
-        let values = [NOM, PRENOM, E_MAIL, ROLE];
 
-        if (MOTS_DE_PASSE) {
-            const hashedPassword = bcrypt.hashSync(MOTS_DE_PASSE, 8);
-            sql += ", MOTS_DE_PASSE=?";
-            values.push(hashedPassword);
-        }
-
-        sql += " WHERE ID_EMPLOYE=?";
-        values.push(id);
-
-        db.query(sql, values, (err, result) => {
+    db.query(
+        "SELECT ID_EMPLOYE FROM utilisateur WHERE ID_EMPLOYE=?",
+        [id],
+        (err, results) => {
             if (err) return res.status(500).json({ message: err.message });
-            res.json({ message: "Utilisateur mis à jour" });
-        });
-    });
+
+            if (results.length === 0) {
+                return res.status(404).json({ message: "Utilisateur non trouvé" });
+            }
+
+            let sql = "UPDATE utilisateur SET NOM=?, PRENOM=?, E_MAIL=?, ROLE=?";
+            let values = [NOM, PRENOM, E_MAIL, ROLE];
+
+            if (MOTS_DE_PASSE) {
+                const hashedPassword = bcrypt.hashSync(MOTS_DE_PASSE, 8);
+                sql += ", MOTS_DE_PASSE=?";
+                values.push(hashedPassword);
+            }
+
+            sql += " WHERE ID_EMPLOYE=?";
+            values.push(id);
+
+            db.query(sql, values, (err) => {
+                if (err) return res.status(500).json({ message: err.message });
+
+                res.json({ message: "Utilisateur mis à jour" });
+            });
+        }
+    );
 };
 
-// DELETE - Supprimer un utilisateur
+// ================= DELETE =================
 exports.deleteUser = (req, res) => {
     const { id } = req.params;
-    
-    // Vérifier existence
-    db.query("SELECT ID_EMPLOYE FROM UTILISATEUR WHERE ID_EMPLOYE=?", [id], (err, results) => {
-        if (err) return res.status(500).json({ message: err.message });
-        if (results.length === 0) {
-            return res.status(404).json({ message: "Utilisateur non trouvé" });
-        }
-        
-        db.query("DELETE FROM UTILISATEUR WHERE ID_EMPLOYE=?", [id], (err, result) => {
+
+    db.query(
+        "SELECT ID_EMPLOYE FROM utilisateur WHERE ID_EMPLOYE=?",
+        [id],
+        (err, results) => {
             if (err) return res.status(500).json({ message: err.message });
-            res.json({ message: "Utilisateur supprimé" });
-        });
-    });
+
+            if (results.length === 0) {
+                return res.status(404).json({ message: "Utilisateur non trouvé" });
+            }
+
+            db.query(
+                "DELETE FROM utilisateur WHERE ID_EMPLOYE=?",
+                [id],
+                (err) => {
+                    if (err) return res.status(500).json({ message: err.message });
+
+                    res.json({ message: "Utilisateur supprimé" });
+                }
+            );
+        }
+    );
 };
 
-//connexion
+// = LOGIN =
 exports.login = (req, res) => {
     const { E_MAIL, MOTS_DE_PASSE } = req.body;
 
@@ -119,7 +179,7 @@ exports.login = (req, res) => {
         return res.status(400).json({ message: "Email et mot de passe requis" });
     }
 
-    const sql = "SELECT * FROM UTILISATEUR WHERE E_MAIL = ?";
+    const sql = "SELECT * FROM utilisateur WHERE E_MAIL = ?";
 
     db.query(sql, [E_MAIL], (err, results) => {
         if (err) return res.status(500).json({ message: err.message });
@@ -130,7 +190,6 @@ exports.login = (req, res) => {
 
         const user = results[0];
 
-        // comparer mot de passe
         const isMatch = bcrypt.compareSync(MOTS_DE_PASSE, user.MOTS_DE_PASSE);
 
         if (!isMatch) {
@@ -150,11 +209,12 @@ exports.login = (req, res) => {
     });
 };
 
-//recupérer un utilisateur
+// ================= GET BY ID =================
 exports.getUserById = (req, res) => {
     const { id } = req.params;
 
-    const sql = "SELECT ID_EMPLOYE, NOM, PRENOM, E_MAIL, ROLE FROM UTILISATEUR WHERE ID_EMPLOYE=?";
+    const sql =
+        "SELECT ID_EMPLOYE, NOM, PRENOM, E_MAIL, ROLE FROM utilisateur WHERE ID_EMPLOYE=?";
 
     db.query(sql, [id], (err, results) => {
         if (err) return res.status(500).json({ message: err.message });
