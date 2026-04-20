@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style_gestion.css">
+   
     <title>Total employé marketing</title>
 </head>
 <body>
@@ -12,7 +13,8 @@
 
       <div class="gauche2">
         <button class="retour2">
-<a href="/Dashboard/dashboard.html"><img src="/image/3585896.png" alt="retour"></a>
+<a href="/Dashboard/dashboard.html">
+
         </button>
     </div>
     <div class="droite2">
@@ -24,8 +26,13 @@
   </div>
 
 <script>
+
+
+
+
 document.addEventListener('DOMContentLoaded', async () => {
   const DEPT = 'Marketing';
+  
 
   // Auto-refresh
   function refreshPage() {
@@ -37,7 +44,7 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   try {
     const response = await fetch(`/api/employes/dept/${DEPT}`);
-    const data = await response.json();
+const data = await response.json();
 
     // Total
     const h1 = document.querySelector('h1');
@@ -48,6 +55,8 @@ document.addEventListener('DOMContentLoaded', async () => {
 
     // Cards
     const container = document.querySelector('.container');
+    const grid  = document.createElement('div');
+    grid.style.cssText = 'display: grid; grid-template-columns: repeat(auto-fill  , minmax(300px, 1fr)); gap: 20px; margin-top: 20px;';
     container.innerHTML += `
       <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; margin-top: 20px;">
         ${data.employees.map(emp => {
@@ -55,9 +64,10 @@ document.addEventListener('DOMContentLoaded', async () => {
           const role = emp.POSTE || 'Poste non défini';
           const email = emp.E_MAIL || 'N/A';
           const tel = emp.TELEPHONE || '';
+          // <a href="/employe/détails.html?id=${emp.ID_EMPLOYE}" class="card-link"></a>
           return `
             <div class="card">
-              <a href="/employe/détails.html?id=${emp.ID_EMPLOYE}" class="card-link"></a>
+              
               <div class="left">
                 <p><strong>${fullName}</strong></p>
                 <p>${role}</p>
@@ -68,7 +78,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 <button class="btn-archive" onclick="if(confirm('Archiver?')) fetch('/api/employes/${emp.ID_EMPLOYE}',{method:'DELETE'}).then(refreshPage)">
                   <img src="/image/1343124.png" alt="Archiver">
                 </button>
-                <a href="/employe/modifie_employe.html?id=${emp.ID_EMPLOYE}" class="btn-modifier">
+               
                   <img src="/image/10174003.png" alt="Modifier">
                 </a>
                 <span class="details" onclick="showDetails(${emp.ID_EMPLOYE})">Details</span>

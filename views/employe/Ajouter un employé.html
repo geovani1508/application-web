@@ -135,14 +135,19 @@ document.addEventListener('DOMContentLoaded', function() {
       
       const data = await response.json();
       
-      if (data.success) {
+        if (data.success) {
+          const dept = formData.get('choisir_un_departement') || 'dashboard';
+          alert('Employé ajouté avec succès!');
+          window.dispatchEvent(new CustomEvent('refresh-stats'));
+          
+          // Ouvre page dept du nouvel employé
+          if (dept !== '') {
+            window.open('/employe/gestion des employé.html', '_blank');
+          }
+        window.location.href = '/employe/gestion des employé.html';  // Liste tous employés
 
-        alert(' Employé ajouté avec succès!');
-        // Trigger global refresh
-        window.dispatchEvent(new CustomEvent('refresh-stats'));
-        window.location.href = '/Dashboard/dashboard.html';
 
-      } else {
+        } else {
         throw new Error(data.error || 'Erreur inconnue');
       }
     } catch (error) {

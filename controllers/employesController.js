@@ -373,11 +373,8 @@ exports.getDashboardStats = (req, res) => {
         
         // Defaults pour cartes existantes
         stats.byDept['RH'] = stats.byDept['RH'] || 0;
-        stats.byDept['Finance'] = stats.byDept['Finance'] || 0;
-
-        stats.byDept['Marketing'] = stats.byDept['Marketing'] || 0;  
         stats.byDept['Finances'] = stats.byDept['Finance'] || 0;
-
+        stats.byDept['Marketing'] = stats.byDept['Marketing'] || 0;  
         stats.byDept['IT'] = stats.byDept['IT'] || 0;
         
         res.json(stats);

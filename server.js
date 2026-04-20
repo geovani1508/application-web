@@ -33,6 +33,7 @@ app.use('/employe', express.static(path.join(__dirname, 'views/employe')));
 // Alias autres subdirs
 app.use('/departement', express.static(path.join(__dirname, 'views/departement')));
 app.use('/poste', express.static(path.join(__dirname, 'views/poste')));
+app.use('/Dashboard', express.static(path.join(__dirname, 'views/Dashboard')));
 
 
 
@@ -55,6 +56,12 @@ app.use("/api/poste", posteRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/employes", employesRoutes);
 app.use("/api/archives", archiveRoutes);
+app.use("/api/archives", archiveRoutes);
+// app.use("/api/marketing/, employesRoutes"); // Route pour total employé marketing
+// app.use("/api/it/, employesRoutes"); // Route pour total employé IT
+// app.use("/api/finances/, employesRoutes");  // Route pour total employé finances
+// app.use("/api/rh/, employesRoutes");  // Route pour total employé RH
+
 
 // PAGES HTML
 app.get("/", (req, res) => {

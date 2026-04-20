@@ -74,29 +74,30 @@
 
         <div class="stat-card3">
 
-            <a href="Total employés RH.html" class="stat-card">
+<a href="/Dashboard/Total employés RH.html" class="stat-card">
                 <div class="stat-title">Total Employé RH</div>
-                <div class="stat-number"id="rh">01</div>
+                <div class="stat-number" id="rh">01</div>
             </a>
 
-            <a href="Total Employés finances.html" class="stat-card">
+<a href="/Dashboard/Total Employés finances.html" class="stat-card">
                 <div class="stat-title">Total Employés finances</div>
-                <div class="stat-number"id="finance">01</div>
+                <div class="stat-number" id="finance">01</div>
             </a>
 
         </div>
 
         <div class="stat-card4">
 
-            <a href="Total employé marketing.html" class="stat-card">
+<a href="/Dashboard/Total employé marketing.html" class="stat-card">
                 <div class="stat-title">Total Employé marketing</div>
                 <div class="stat-number" id="marketing">01</div>
             </a>
 
-            <a href="Total employés IT.html" class="stat-card">
+<a href="/Dashboard/Total employés IT.html" class="stat-card">
                 <div class="stat-title">Total Employés IT</div>
                 <div class="stat-number" id="it">04</div>
             </a>
+
 
         </div>
 
@@ -213,43 +214,24 @@ async function refreshDashboardStats() {
     const response = await fetch('/api/employes/stats');
     const stats = await response.json();
     
-    
-    // Met à jour Total Employés
-    const totalEmpEl = document.querySelector('a[href="/employe/gestion des employé.html"] .stat-number');
-    if (totalEmpEl) totalEmpEl.textContent = stats.totalEmployes;
-    
-    // Met à jour Départements
-    const totalDeptEl = document.querySelector('a[href="/departement/departement.html"] .stat-number');
-    if (totalDeptEl) totalDeptEl.textContent = stats.totalDepartements;
-    
-    // Met à jour par département (match titres des cartes)
-    const rhEl = Array.from(document.querySelectorAll('.stat-title')).find(el => 
-      el.textContent.includes('RH')
-    )?.parentElement?.querySelector('.stat-number');
-    if (rhEl) rhEl.textContent = stats.byDept['RH'] || 0;
-    
-    const financesEl = Array.from(document.querySelectorAll('.stat-title')).find(el => 
-      el.textContent.includes('finances')
-    )?.parentElement?.querySelector('.stat-number');
-    if (financesEl) financesEl.textContent = stats.byDept['Finances'] || 0;
-    
-    const marketingEl = Array.from(document.querySelectorAll('.stat-title')).find(el => 
-      el.textContent.includes('marketing')
-    )?.parentElement?.querySelector('.stat-number');
-    if (marketingEl) marketingEl.textContent = stats.byDept['Marketing'] || 0;
-    
-    const itEl = Array.from(document.querySelectorAll('.stat-title')).find(el => 
-      el.textContent.includes('IT')
-    )?.parentElement?.querySelector('.stat-number');
-    if (itEl) itEl.textContent = stats.byDept['IT'] || 0;
-    
+    // Direct IDs - FIXED !
+    document.getElementById('rh').textContent = stats.byDept['RH'] || 0;
+    document.getElementById('finance').textContent = stats.byDept['Finances'] || stats.byDept['Finance'] || 0;
+    document.getElementById('marketing').textContent = stats.byDept['Marketing'] || 0;
+    document.getElementById('it').textContent = stats.byDept['IT'] || 0;
+    document.getElementById('total-employes').textContent = stats.totalEmployes || 0;
+    document.getElementById('total-departements').textContent = stats.totalDepartements || 0;
   } catch (error) {
-    console.error('Erreur chargement stats dashboard:', error);
+    console.error('Stats error:', error);
   }
 }
 
+
 document.addEventListener('DOMContentLoaded', () => {
   refreshDashboardStats();  // Load initial
+
+
+
   
   // Auto-refresh every 30s
   setInterval(refreshDashboardStats, 30000);

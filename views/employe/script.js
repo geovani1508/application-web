@@ -2,7 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
 const list = document.getElementById('employees-list');
   if (!list) return;
 
-// Auto-refresh list every 30s
+// Auto-refresh la liste tout les 30s
 setInterval(() => {
   location.reload();
 }, 30000);
