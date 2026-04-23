@@ -33,7 +33,7 @@
         
             
       <span>
-                <header class="header"> 
+         <header class="header"> 
               
         <span>
                <h1 class="title1">
@@ -43,10 +43,11 @@
             </div>
         </span>
             <span>
-               gestion des employés</span>
+               gestion des employés
+            </span>
             </h1>
         </span>
-        </header></span>
+        </header>
     </div>
     
     <div class="banner">
@@ -76,12 +77,12 @@
 
 <a href="/Dashboard/Total employés RH.html" class="stat-card">
                 <div class="stat-title">Total Employé RH</div>
-                <div class="stat-number" id="rh">01</div>
+                <div class="stat-number" id="RH">01</div>
             </a>
 
 <a href="/Dashboard/Total Employés finances.html" class="stat-card">
                 <div class="stat-title">Total Employés finances</div>
-                <div class="stat-number" id="finance">01</div>
+                <div class="stat-number" id="fi">01</div>
             </a>
 
         </div>
@@ -90,7 +91,7 @@
 
 <a href="/Dashboard/Total employé marketing.html" class="stat-card">
                 <div class="stat-title">Total Employé marketing</div>
-                <div class="stat-number" id="marketing">01</div>
+                <div class="stat-number" id="mK">01</div>
             </a>
 
 <a href="/Dashboard/Total employés IT.html" class="stat-card">
@@ -141,104 +142,142 @@
         }
     </style>
     <script>
-        function toggleNav() {
-            const sidebar = document.querySelector('.sidebar');
-            const checkbox = document.getElementById('menu-toggle');
-            sidebar.classList.toggle('active');
-            checkbox.checked = !checkbox.checked;
-        }
-        function closeNav() {
-            const sidebar = document.querySelector('.sidebar');
-            const checkbox = document.getElementById('menu-toggle');
-            sidebar.classList.remove('active');
-            checkbox.checked = false;
-        }
-        function toggleMenu() {
-    document.querySelector('.menu').classList.toggle('active');
-}
-        document.querySelector('.menu-btn').addEventListener('click', toggleNav);
-        document.addEventListener('click', function(e) {
-            if (e.target === document.querySelector('.sidebar')) {
-                closeNav();
-            }
-        });
-    </script>
-    <script>
-document.addEventListener('DOMContentLoaded', async () => {
-  const DEPT = 'RH';  // RH.html → 'RH' | marketing → 'Marketing' | IT → 'IT' | finances → 'Finance'
 
-  const res = await fetch(`/api/employes/dept/${DEPT}`);
-  const {total, employees} = await res.json();
 
-  // Compteur total
-//   const h1 = document.querySelector('h1');
-//   h1.insertAdjacentHTML('afterend', `<div style="font-size:1.4em;font-weight:bold;margin:10px 0;">${total} employé(s)</div>`);
-
-  // Supprimer cartes statiques
-  document.querySelectorAll('.card').forEach(card => card.remove());
-
-  // Ajouter cartes dynamiques
-  const container = document.querySelector('.container');
-  employees.forEach(emp => {
-    const card = document.createElement('div');
-    card.className = 'card';
-    card.innerHTML = `
-      <a href="/employe/détails.html?id=${emp.ID_EMPLOYE}" class="card-link"></a>
-      <div class="left">
-        <p><strong>${emp.NOM || ''} ${emp.PRENOM || ''}</strong></p>
-        <p>${emp.POSTE || emp.CHOISIR_UN_DEPARTEMENT || ''}</p>
-        <p class="email">${emp.E_MAIL || ''}</p>
-        <p>${emp.TELEPHONE || ''}</p>
-      </div>
-      <div class="right">
-        <button class="btn-archive" onclick="if(confirm('Archiver?')) fetch('/api/employes/${emp.ID_EMPLOYE}',{method:'DELETE'}).then(()=>location.reload())">
-          <img src="/image/1343124.png" alt="Archiver">
-        </button>
-        <a href="/employe/modifie_employe.html?id=${emp.ID_EMPLOYE}" class="btn-modifier">
-          <img src="/image/10174003.png" alt="Modifier">
-        </a>
-        <span class="details" onclick="location.href='/employe/détails.html?id=${emp.ID_EMPLOYE}'">Details</span>
-      </div>
-    `;
-    container.appendChild(card);
-  });
-  
-  if (employees.length === 0) container.innerHTML += '<p style="text-align:center;color:#999;">Aucun employé</p>';
-});
-</script>
-
-    <!-- Script dynamique pour dashboard avec auto-refresh -->
-    <script>
 async function refreshDashboardStats() {
   try {
-    const response = await fetch('/api/employes/stats');
+    const response = await fetch('/api/employes/stats?t=' + Date.now());
+
+    if (!response.ok) throw new Error("Erreur API");
+
     const stats = await response.json();
-    
-    // Direct IDs - FIXED !
-    document.getElementById('rh').textContent = stats.byDept['RH'] || 0;
-    document.getElementById('finance').textContent = stats.byDept['Finances'] || stats.byDept['Finance'] || 0;
-    document.getElementById('marketing').textContent = stats.byDept['Marketing'] || 0;
+
+    document.getElementById('RH').textContent = stats.byDept['RH'] || 0;
+    document.getElementById('fi').textContent = stats.byDept['FI'] || 0;
+
+    document.getElementById('mK').textContent = stats.byDept['MK'] || 0;
     document.getElementById('it').textContent = stats.byDept['IT'] || 0;
+
     document.getElementById('total-employes').textContent = stats.totalEmployes || 0;
     document.getElementById('total-departements').textContent = stats.totalDepartements || 0;
+
   } catch (error) {
     console.error('Stats error:', error);
   }
 }
 
-
 document.addEventListener('DOMContentLoaded', () => {
-  refreshDashboardStats();  // Load initial
+  refreshDashboardStats();
 
+  setInterval(refreshDashboardStats, 10000);
 
-
-  
-  // Auto-refresh every 30s
-  setInterval(refreshDashboardStats, 30000);
-  
-  // Listen for refresh-stats events (from other pages)
   window.addEventListener('refresh-stats', refreshDashboardStats);
 });
+
+
+//         function toggleNav() {
+//             const sidebar = document.querySelector('.sidebar');
+//             const checkbox = document.getElementById('menu-toggle');
+//             sidebar.classList.toggle('active');
+//             checkbox.checked = !checkbox.checked;
+//         }
+//         function closeNav() {
+//             const sidebar = document.querySelector('.sidebar');
+//             const checkbox = document.getElementById('menu-toggle');
+//             sidebar.classList.remove('active');
+//             checkbox.checked = false;
+//         }
+//         function toggleMenu() {
+//     document.querySelector('.menu').classList.toggle('active');
+// }
+//         document.querySelector('.menu-btn').addEventListener('click', toggleNav);
+//         document.addEventListener('click', function(e) {
+//             if (e.target === document.querySelector('.sidebar')) {
+//                 closeNav();
+//             }
+//         });
+//     </script>
+   <script>
+// document.addEventListener('DOMContentLoaded', async () => {
+// //   const DEPT = 'RH';  // RH.html → 'RH' | marketing → 'Marketing' | IT → 'IT' | finances → 'Finance'
+//  const response = await fetch('/api/employes/stats');
+//   const stats = await response.json();
+
+
+// //   const {total, employees} = await res.json();
+
+//   // Compteur total
+// //   const h1 = document.querySelector('h1');
+// //   h1.insertAdjacentHTML('afterend', `<div style="font-size:1.4em;font-weight:bold;margin:10px 0;">${total} employé(s)</div>`);
+
+//   // Supprimer cartes statiques
+//   document.querySelectorAll('.card').forEach(card => card.remove());
+
+//   // Ajouter cartes dynamiques
+// //   const container = document.querySelector('.container');
+//   employees.forEach(emp => {
+//     const card = document.createElement('div');
+//     card.className = 'card';
+//     card.innerHTML = `
+//       <a href="/employe/détails.html?id=${emp.ID_EMPLOYE}" class="card-link"></a>
+//       <div class="left">
+//         <p><strong>${emp.NOM || ''} ${emp.PRENOM || ''}</strong></p>
+//         <p>${emp.POSTE || emp.CHOISIR_UN_DEPARTEMENT || ''}</p>
+//         <p class="email">${emp.E_MAIL || ''}</p>
+//         <p>${emp.TELEPHONE || ''}</p>
+//       </div>
+//       <div class="right">
+//         <button class="btn-archive" onclick="if(confirm('Archiver?')) fetch('/api/employes/${emp.ID_EMPLOYE}',{method:'DELETE'}).then(()=>location.reload())">
+//           <img src="/image/1343124.png" alt="Archiver">
+//         </button>
+//         <a href="/employe/modifie_employe.html?id=${emp.ID_EMPLOYE}" class="btn-modifier">
+//           <img src="/image/10174003.png" alt="Modifier">
+//         </a>
+//         <span class="details" onclick="location.href='/employe/détails.html?id=${emp.ID_EMPLOYE}'">Details</span>
+//       </div>
+//     `;
+//     container.appendChild(card);
+//   });
+  
+//   if (employees.length === 0) container.innerHTML += '<p style="text-align:center;color:#999;">Aucun employé</p>';
+// });
+// <!-- </script> 
+
+    <!-- Script dynamique pour dashboard avec auto-refresh -->
+    <script>
+// async function refreshDashboardStats() {
+//   try {
+//     const response = await fetch('/api/employes/stats');
+//     const stats = await response.json();
+    
+//     // Direct IDs - FIXED !
+//     document.getElementById('rh').textContent = stats.byDept['RH'] || 0;
+//     document.getElementById('finances').textContent = stats.byDept['FI'] || stats.byDept['FINANCES'] || 0;
+//     document.getElementById('marketing').textContent = stats.byDept['MK'] || 0;
+//     document.getElementById('it').textContent = stats.byDept['IT'] || 0;
+//     document.getElementById('total-employes').textContent = stats.totalEmployes || 0;
+//     document.getElementById('total-departements').textContent = stats.totalDepartements || 0;
+//   } catch (error) {
+//     console.error('Stats error:', error);
+//   }
+// }
+
+
+// document.addEventListener('DOMContentLoaded', () => {
+//   refreshDashboardStats();  // Load initial
+
+
+
+  
+//   // Auto-refresh every 30s
+//   setInterval(refreshDashboardStats, 10000);
+  
+//   // Listen for refresh-stats events (from other pages)
+//   window.addEventListener('refresh-stats', () => {
+//   refreshDashboardStats();
+// });
+//   window.addEventListener('refresh-stats', refreshDashboardStats);
+// });
     </script>
 </body>
 </html>

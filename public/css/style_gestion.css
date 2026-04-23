@@ -49,13 +49,13 @@ h1 {
 .search {
   display: flex;
   align-items: center;
-  width: 250px;          /* largeur totale de la barre */
+  width: 70%;          /* largeur totale de la barre */
   border-radius: 5px;
   overflow: hidden;
   background-color: #f0f0f0;
   margin-left: 20%;     /*espace depuis le retour*/
   justify-content: flex-end;
-  gap: 10px; /* espace entre input et bouton */
+  gap: 15px; /* espace entre input et bouton */
 }
 
 /* Input recherche */

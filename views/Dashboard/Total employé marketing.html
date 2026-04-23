@@ -13,7 +13,7 @@
 
       <div class="gauche2">
         <button class="retour2">
-<a href="/Dashboard/dashboard.html">
+<a href="/Dashboard/dashboard.html"><img src="/image/3585896.png" alt="retour"></a>
 
         </button>
     </div>
@@ -31,7 +31,7 @@
 
 
 document.addEventListener('DOMContentLoaded', async () => {
-  const DEPT = 'Marketing';
+  const DEPT = 'MK';
   
 
   // Auto-refresh
@@ -64,10 +64,10 @@ const data = await response.json();
           const role = emp.POSTE || 'Poste non défini';
           const email = emp.E_MAIL || 'N/A';
           const tel = emp.TELEPHONE || '';
-          // <a href="/employe/détails.html?id=${emp.ID_EMPLOYE}" class="card-link"></a>
+          
           return `
             <div class="card">
-              
+               <a href="/employe/détails.html?id=${emp.ID_EMPLOYE}" class="card-link"></a>
               <div class="left">
                 <p><strong>${fullName}</strong></p>
                 <p>${role}</p>

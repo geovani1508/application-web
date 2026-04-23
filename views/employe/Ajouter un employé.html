@@ -61,10 +61,16 @@
 
     <div class="photo-employe">
         
-        
-        <input type="file" name="photo" accept="image/*" >
-       <img  src="/image/photo.jpg" alt="image">
+      
+        <img  src="/image/631050.png" alt="" class="img" id="profile-pic">
+         <!-- <label for="input-file"> -->
+      <label for="input-file"><br><br>
+     
+      </label>
+      
+       <input type="file" name="photo" accept="image/*" id="input-file">
     </div> 
+     
     <div class="formulaire2">
         <div class="form-group-employe">
             <input type="text" name="nom" placeholder="Nom :" required>
@@ -86,14 +92,23 @@
             <input type="tel" name="telephone" placeholder="Téléphone :" required>
         </div>
 
-        <div class="form-group-employe">
-            <select name="choisir_un_département" class="select-employe" required>
-                <option value="">Choisir un département ▼</option>
-                <option value="IT">IT</option>
-                <option value="RH">RH</option>
+<select name="CHOISIR_UN_DEPARTEMENT" class="select-employe" id="choisir_un_departement" required>
+    <option value="" disabled selected>Choisir un département</option>
+    <option value="it">IT</option>
+    <option value="rh">Ressource Humaine</option>
+    <option value="fi">Finance</option>
+    <option value="mk">Marketing</option>
+</select>
+
+        <!-- <div class="form-group-employe">
+            <select name="CHOISIR_UN_DEPARTEMENT" class="select-employe"   id="choisir_un_departement" required>
+                <option value="" disabled selected>Choisir un département</option>
+                <option value="IT">informatique</option>
+                <option value="RH">Ressource Humaine</option>
                 <option value="Finance">Finance</option>
                 <option value="Marketing">Marketing</option>
-            </select>
+              
+            </select> -->
         </div>
 
         <div class="form-group-employe">
@@ -114,9 +129,48 @@
 </div>
 
 </div>
+<script>
+    let profilepic = document.getElementById("profile-pic");
+     let inputfile = document.getElementById("input-file");
+     inputfile.onchange = function(){
+        profilepic.src = URL.createObjectURL(inputFile.files[0]);
+
+     }
+</script>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+  // Dynamiquement charger les départements depuis la DB
+let valuer = document.getElementById('choisir_un_departement');
+console.log('Select département trouvé:', valuer);
+  const select = document.getElementById('choisir_un_departement');
+  if(!select) return console.error('selecte departement non trouvé');
+  fetch('/api/departements')
+    .then(res => res.json())
+    .then(departements => {
+      // Garde l'option par défaut, supprime les statiques
+      select.innerHTML = '<option value="" disabled selected>Choisir un département</option>';
+      
+      departements.forEach(dept => {
+        const option = document.createElement('option');
+        option.value = dept.CODE || dept.NOM_DEPARTEMENT || 'IT';
+        option.value = dept.CODE || dept.NOM_DEPARTEMENT || 'RH';
+        option.value = dept.CODE || dept.NOM_DEPARTEMENT || 'finances';
+        option.value = dept.CODE || dept.NOM_DEPARTEMENT || 'MK';
+        option.textContent = dept.NOM_DEPARTEMENT || dept.CODE || 'Département non nommé';
+        select.appendChild(option);
+      });
+      
+      if (departements.length === 0) {
+        select.innerHTML += '<option value="" disabled>Aucun département trouvé</option>';
+      }
+    })
+    .catch(error => {
+      console.error('Erreur chargement départements:', error);
+      select.innerHTML += '<option value="" disabled>Erreur chargement</option>';
+    });
+
+  // Submit form existant
   const form = document.querySelector('form');
   form.addEventListener('submit', async function(e) {
     e.preventDefault();
@@ -136,7 +190,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const data = await response.json();
       
         if (data.success) {
-          const dept = formData.get('choisir_un_departement') || 'dashboard';
+          const dept = formData.get('CHOISIR_UN_DEPARTEMENT') || 'dashboard';
           alert('Employé ajouté avec succès!');
           window.dispatchEvent(new CustomEvent('refresh-stats'));
           
@@ -158,9 +212,8 @@ document.addEventListener('DOMContentLoaded', function() {
       submitBtn.disabled = false;
     }
   });
-});
+})
 </script>
 
 </body>
 </html>
-

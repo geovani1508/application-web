@@ -275,7 +275,7 @@ exports.createEmploye = (req, res) => {
     const adresse = req.body.adresse || '';
     const poste = req.body.poste || '';
     const telephone = req.body.telephone || '';
-    const choisir_un_département = req.body.choisir_un_département || 'Non assigné';
+    const choisir_un_departement = req.body.CHOISIR_UN_DEPARTEMENT;
     const email = req.body.email || '';
     const date_d_embauche = req.body.date_d_embauche || null;
 
@@ -283,14 +283,14 @@ exports.createEmploye = (req, res) => {
         INSERT INTO employe ( PHOTO, NOM, PRENOM, ADRESSE, POSTE, TELEPHONE, CHOISIR_UN_DEPARTEMENT, E_MAIL, DATE_D_EMBAUCHE)
         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
     `;
-
-    db.query(sql, [photo, nom, prenom, adresse, poste, telephone, choisir_un_département, email, date_d_embauche], (err, result) => {
+     console.log("DEPARTEMENT REÇU:", choisir_un_departement);
+    db.query(sql, [photo, nom, prenom, adresse, poste, telephone, choisir_un_departement, email, date_d_embauche], (err, result) => {
         if (err) {
             console.error('Erreur INSERT employé:', err);
             return res.status(500).json({ error: err.message });
         }
         console.log('Employé ajouté ID:', result.insertId);
-        res.json({ success: true, id: result.insertId, dept: choisir_un_département });
+        res.json({ success: true, id: result.insertId, dept: choisir_un_departement });
     });
 };
 
@@ -314,7 +314,8 @@ exports.getArchives = (req, res) => {
 
     const dateCol = colRows.find((r) => String(r.COLUMN_NAME).toUpperCase() === 'DATE_D_ARCHIVE');
     const idArch = colRows.find((r) => String(r.COLUMN_NAME).toUpperCase() === 'ID_ARCHIVE');
-    const orderSql = dateCol
+    // const orderSqje ,vais ,t,'l = dateCol
+    const orderSqje = dateCol
       ? `\`${dateCol.COLUMN_NAME}\` DESC`
       : idArch
         ? `\`${idArch.COLUMN_NAME}\` DESC`
@@ -344,44 +345,84 @@ exports.getEmployesByDept = (req, res) => {
 };
 
 // Dashboard stats
+
+
 exports.getDashboardStats = (req, res) => {
-  // Total employés
   db.query("SELECT COUNT(*) as total FROM employe", (err, totalEmp) => {
     if (err) return res.status(500).json({ error: err.message });
-    
-    // Total départements
+
     db.query("SELECT COUNT(*) as total FROM DEPARTEMENT", (err, totalDept) => {
       if (err) return res.status(500).json({ error: err.message });
-      
-      // Employés par département
+
       db.query(`
         SELECT CHOISIR_UN_DEPARTEMENT as dept, COUNT(*) as count 
         FROM employe 
         GROUP BY CHOISIR_UN_DEPARTEMENT
-      `, (err, byDept) => {
+      `, (err, results) => {
         if (err) return res.status(500).json({ error: err.message });
-        
-        const stats = {
+
+        const byDept = {
+          RH: 0,
+          FI: 0,
+          MK: 0,
+          IT: 0
+        };
+
+        results.forEach(row => {
+          if (byDept.hasOwnProperty(row.dept)) {
+            byDept[row.dept] = row.count;
+          }
+        });
+
+        res.json({
           totalEmployes: totalEmp[0].total,
           totalDepartements: totalDept[0].total,
-          byDept: {}
-        };
-        
-        byDept.forEach(row => {
-          stats.byDept[row.dept || 'Non assigné'] = row.count;
+          byDept
         });
-        
-        // Defaults pour cartes existantes
-        stats.byDept['RH'] = stats.byDept['RH'] || 0;
-        stats.byDept['Finances'] = stats.byDept['Finance'] || 0;
-        stats.byDept['Marketing'] = stats.byDept['Marketing'] || 0;  
-        stats.byDept['IT'] = stats.byDept['IT'] || 0;
-        
-        res.json(stats);
       });
     });
   });
 };
+
+
+// exports.getDashboardStats = (req, res) => {
+//   // Total employés
+//   db.query("SELECT COUNT(*) as total FROM employe", (err, totalEmp) => {
+//     if (err) return res.status(500).json({ error: err.message });
+    
+//     // Total départements
+//     db.query("SELECT COUNT(*) as total FROM DEPARTEMENT", (err, totalDept) => {
+//       if (err) return res.status(500).json({ error: err.message });
+      
+//       // Employés par département
+//       db.query(`
+//         SELECT CHOISIR_UN_DEPARTEMENT as dept, COUNT(*) as count 
+//         FROM employe 
+//         GROUP BY CHOISIR_UN_DEPARTEMENT
+//       `, (err, byDept) => {
+//         if (err) return res.status(500).json({ error: err.message });
+        
+//         const stats = {
+//           totalEmployes: totalEmp[0].total,
+//           totalDepartements: totalDept[0].total,
+//           byDept: {}
+//         };
+        
+//         byDept.forEach(row => {
+//           stats.byDept[row.dept || 'Non assigné'] = row.count;
+//         });
+        
+//         // Defaults pour cartes existantes
+//         stats.byDept['RH'] = stats.byDept['RH'] || 0;
+//         stats.byDept['Finances'] = stats.byDept['Finance'] || 0;
+//         stats.byDept['Marketing'] = stats.byDept['Marketing'] || 0;  
+//         stats.byDept['IT'] = stats.byDept['IT'] || 0;
+        
+//         res.json(stats);
+//       });
+//     });
+//   });
+// };
 
 
 exports.restoreEmploye = (req, res) => {

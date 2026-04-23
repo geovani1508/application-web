@@ -57,6 +57,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/employes", employesRoutes);
 app.use("/api/archives", archiveRoutes);
 app.use("/api/archives", archiveRoutes);
+
 // app.use("/api/marketing/, employesRoutes"); // Route pour total employé marketing
 // app.use("/api/it/, employesRoutes"); // Route pour total employé IT
 // app.use("/api/finances/, employesRoutes");  // Route pour total employé finances
